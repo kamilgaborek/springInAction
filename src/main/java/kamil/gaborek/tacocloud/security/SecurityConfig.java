@@ -28,15 +28,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers("/h2-console/**")
+                .permitAll()
                 .antMatchers("/design","/orders")
                 .access("hasRole('ROLE_USER')")
-                .antMatchers("/","/**")
+                .antMatchers("/","/**","/console/**")
                 .access("permitAll")
                 .and()
                 .formLogin()
                 .loginPage("/login")
                 .usernameParameter("username")
                 .passwordParameter("password");
+
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
     }
 
 
